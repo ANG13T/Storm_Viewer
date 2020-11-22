@@ -15,6 +15,11 @@ class ViewController: UITableViewController {
         title = "Storm Viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
+        
+        performSelector(inBackground: #selector(loadImages), with: nil)
+    }
+    
+    @objc func loadImages(){
         let fm = FileManager.default;
         let path = Bundle.main.resourcePath!
         let items = try! fm.contentsOfDirectory(atPath: path)
@@ -24,7 +29,7 @@ class ViewController: UITableViewController {
             }
         }
         pictures.sort()
-        
+        tableView.performSelector(onMainThread: #selector(tableView.reloadData), with: nil, waitUntilDone: false)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection: Int) -> Int{
